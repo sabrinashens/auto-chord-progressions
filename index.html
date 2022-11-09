@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <button id = "play" style = "background-color:white; padding:3px 100px; cursor: pointer">Play</button><br>
+</head>
 <body>
-<div class = "tempo">
-     <label for="tempo">Tempo:</label>
-     <input type="text" id="tempo" value = 100>
+<br><div class = "tempo">
+  <label for="tempo">Tempo:</label>
+  <input type="text" id="tempo" value = 100>
 </div><br>
 
 <div class = "beats">
 <label for ="beats">Beats:</label>
   <select name="beats" id="beats">
-      <option value=2>Duple</option>
-      <option value=3>Triple</option>
-      <option value=4>Quadruple</option>
+    <option value=2>Duple</option>
+    <option value=3>Triple</option>
+    <option value=4>Quadruple</option>
   </select>
-  <button id = "playBeats">Play</button>
+  <button id = "confirm">Confirm</button>
 </div><br>
 
 <div class = "waveform">
@@ -30,94 +33,112 @@
 </div><br>
 
 <div class = "chords1" id = "chords1">
-<label for ="chords1">Chords[1]:</label>
-  <select>
-      <option value=C>C</option>
-      <option value=C#>C#</option>
-      <option value=D>D</option>
-      <option value=D#>D#</option>
-      <option value=E>E</option>
-      <option value=F>F</option>
-      <option value=F#>F#</option>
-      <option value=G>G</option>
-      <option value=G#>G#</option>
-      <option value=A>A</option>
-      <option value=A#>A#</option>
-      <option value=B>B</option>
+<label for ="firstNote">Chords[1]:</label>
+  <select id="firstNote">
+    <option disabled selected value></option>
+    <option value=C>C</option>
+    <option value=C#>C#</option>
+    <option value=D>D</option>
+    <option value=D#>D#</option>
+    <option value=E>E</option>
+    <option value=F>F</option>
+    <option value=F#>F#</option>
+    <option value=G>G</option>
+    <option value=G#>G#</option>
+    <option value=A>A</option>
+    <option value=A#>A#</option>
+    <option value=B>B</option>
   </select>
-  <select>
-      <option value=major>major</option>
-      <option value=minor>minor</option>
+  <select id="firstChord">
+    <option disabled selected value></option>
+    <option value=major>major</option>
+    <option value=minor>minor</option>
+    <option value=dim>diminished</option>
+    <option value=aug>augmented</option>
   </select>
+  <l id ="enter1"></l>
 </div>
 
 <div class = "chords2" id = "chords2">
-<label for ="chords2" >Chords[2]:</label>
-  <select>
-      <option value=C>C</option>
-      <option value=C#>C#</option>
-      <option value=D>D</option>
-      <option value=D#>D#</option>
-      <option value=E>E</option>
-      <option value=F>F</option>
-      <option value=F#>F#</option>
-      <option value=G>G</option>
-      <option value=G#>G#</option>
-      <option value=A>A</option>
-      <option value=A#>A#</option>
-      <option value=B>B</option>
+<label for ="secondNote" >Chords[2]:</label>
+  <select id="secondNote">
+    <option disabled selected value></option>
+    <option value=C>C</option>
+    <option value=C#>C#</option>
+    <option value=D>D</option>
+    <option value=D#>D#</option>
+    <option value=E>E</option>
+    <option value=F>F</option>
+    <option value=F#>F#</option>
+    <option value=G>G</option>
+    <option value=G#>G#</option>
+    <option value=A>A</option>
+    <option value=A#>A#</option>
+    <option value=B>B</option>
   </select>
-  <select>
-      <option value=major>major</option>
-      <option value=minor>minor</option>
+  <select id="secondChord">
+    <option disabled selected value></option>
+    <option value=major>major</option>
+    <option value=minor>minor</option>
+    <option value=dim>diminished</option>
+    <option value=aug>augmented</option>
   </select>
+  <l id ="enter2"></l>
 </div>
 
 <div class = "chords3" id = "chords3" style="visibility:hidden">
-<label for ="chords3">Chords[3]:</label>
-  <select>
-      <option value=C>C</option>
-      <option value=C#>C#</option>
-      <option value=D>D</option>
-      <option value=D#>D#</option>
-      <option value=E>E</option>
-      <option value=F>F</option>
-      <option value=F#>F#</option>
-      <option value=G>G</option>
-      <option value=G#>G#</option>
-      <option value=A>A</option>
-      <option value=A#>A#</option>
-      <option value=B>B</option>
+<label for ="thirdNote">Chords[3]:</label>
+  <select id="thirdNote">
+    <option disabled selected value></option>
+    <option value=C>C</option>
+    <option value=C#>C#</option>
+    <option value=D>D</option>
+    <option value=D#>D#</option>
+    <option value=E>E</option>
+    <option value=F>F</option>
+    <option value=F#>F#</option>
+    <option value=G>G</option>
+    <option value=G#>G#</option>
+    <option value=A>A</option>
+    <option value=A#>A#</option>
+    <option value=B>B</option>
   </select>
-  <select>
-      <option value=major>major</option>
-      <option value=minor>minor</option>
+  <select id="thirdChord">
+    <option disabled selected value></option>
+    <option value=major>major</option>
+    <option value=minor>minor</option>
+    <option value=dim>diminished</option>
+    <option value=aug>augmented</option>
   </select>
+  <l id ="enter3"></l>
 </div>
 
 <div class = "chords4" id = "chords4" style="visibility:hidden">
-<label for ="chords4">Chords[4]:</label>
-  <select>
-      <option value=C>C</option>
-      <option value=C#>C#</option>
-      <option value=D>D</option>
-      <option value=D#>D#</option>
-      <option value=E>E</option>
-      <option value=F>F</option>
-      <option value=F#>F#</option>
-      <option value=G>G</option>
-      <option value=G#>G#</option>
-      <option value=A>A</option>
-      <option value=A#>A#</option>
-      <option value=B>B</option>
+<label for ="fourthNote">Chords[4]:</label>
+  <select id="fourthNote">
+    <option disabled selected value></option>
+    <option value=C>C</option>
+    <option value=C#>C#</option>
+    <option value=D>D</option>
+    <option value=D#>D#</option>
+    <option value=E>E</option>
+    <option value=F>F</option>
+    <option value=F#>F#</option>
+    <option value=G>G</option>
+    <option value=G#>G#</option>
+    <option value=A>A</option>
+    <option value=A#>A#</option>
+    <option value=B>B</option>
   </select>
-  <select>
-      <option value=major>major</option>
-      <option value=minor>minor</option>
+  <select id="fourthChord">
+    <option disabled selected value></option>
+    <option value=major>major</option>
+    <option value=minor>minor</option>
+    <option value=dim>diminished</option>
+    <option value=aug>augmented</option>
   </select>
+  <l id ="enter4"></l>
 </div><br>
-
-<button id = "play">Play</button>
 
 <script src = "main.js"></script>
 </body>
