@@ -1,6 +1,5 @@
 const playButton = document.getElementById('play');
 const confirmButton = document.getElementById('confirm');
-beatsState = false;
 playState = false;
 
 confirmButton.addEventListener('click', function () {
@@ -30,21 +29,29 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     var clicksGain = {};
     var beatsGain = {};
+    var chordsGain = {};
    
     playButton.addEventListener("click", function () {
-        if (beatsState == false) {	
+        if (playState == false) {	
             tempo = document.getElementById('tempo').value / 80;
             beatsNum = document.getElementById('beats').value; 
             
             playClicks();
             playBeats();
+            selectedChords(); 
             
-            beatsState = true;
+            document.getElementById('play').style.backgroundColor = "black";
+            document.getElementById('play').style.color = "white"; 
+            playState = true;
 		}
-        else if (beatsState == true) {
-			clicksGain.gain.cancelScheduledValues(audioCtx.currentTime);
-			beatsGain.gain.cancelScheduledValues(audioCtx.currentTime);
-        	beatsState = false;
+        else if (playState == true) {
+          clicksGain.gain.cancelScheduledValues(audioCtx.currentTime);
+          beatsGain.gain.cancelScheduledValues(audioCtx.currentTime);
+          chordsGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      
+          document.getElementById('play').style.backgroundColor = "white";
+          document.getElementById('play').style.color = "black"; 
+        	playState = false;
         }
     })
     
@@ -56,8 +63,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         gain.gain.setValueAtTime(0, audioCtx.currentTime);
 
         for (let i = 0; i < 200; i++) {
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime + i/tempo + 0.05);
-            gain.gain.setTargetAtTime(0.02, audioCtx.currentTime + i/tempo + 0.05, 0.02);
+            gain.gain.setValueAtTime(0.02, audioCtx.currentTime + i/tempo + 0.05);
+            gain.gain.setTargetAtTime(0.01, audioCtx.currentTime + i/tempo + 0.05, 0.02);
             gain.gain.setValueAtTime(0, audioCtx.currentTime + i/tempo + 0.07);
             gain.gain.setTargetAtTime(0, audioCtx.currentTime + i/tempo + 0.07, 1/tempo - 0.07); 
         }
@@ -76,8 +83,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         gain.gain.setValueAtTime(0, audioCtx.currentTime);
              
         for (let i = 0; i < 200; i++) {
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime + beatsNum*i/tempo + 0.05);
-            gain.gain.setTargetAtTime(0.07, audioCtx.currentTime + beatsNum*i/tempo + 0.05, 0.02);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime + beatsNum*i/tempo + 0.05);
+            gain.gain.setTargetAtTime(0.1, audioCtx.currentTime + beatsNum*i/tempo + 0.05, 0.02);
             gain.gain.setValueAtTime(0, audioCtx.currentTime + beatsNum*i/tempo + 0.07);
             gain.gain.setTargetAtTime(0, audioCtx.currentTime + beatsNum*i/tempo + 0.07, beatsNum/tempo - 0.07); 
         }
@@ -88,8 +95,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         beatsGain = gain;
     }
     
-    
     ////////////////////////////////////////////////////////    
+    
     const notePitch = {
     "C": 60,
     "C#": 61,
@@ -106,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
     
     function selectedChords() {
+    
         const firstRoot = notePitch[document.getElementById("firstNote").value];     
         const secondRoot = notePitch[document.getElementById("secondNote").value];
         const thirdRoot = notePitch[document.getElementById("thirdNote").value];
@@ -122,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var fourth = chordsComp(fourthRoot, fourthChord);  
         
         if (first.length < 1) {
-			document.getElementById('enter1').innerHTML = "Please select";
+			document.getElementById('enter1').innerHTML = "--Please select--";
         }
         else {
         	document.getElementById('enter1').innerHTML = "";
@@ -130,25 +138,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         
         if (second.length < 1) {
-			document.getElementById('enter2').innerHTML = "Please select";
+			document.getElementById('enter2').innerHTML = "--Please select--";
         }
         else {
         	document.getElementById('enter2').innerHTML = "";
-        	playChords(second);
+        	playChords(midiToFreq(second[1]));
         }
         if (third.length < 1) {
-			document.getElementById('enter3').innerHTML = "Please select";
+			document.getElementById('enter3').innerHTML = "--Please select--";
         }
         else {
         	document.getElementById('enter3').innerHTML = "";
-        	playChords(third);
+        	playChords(midiToFreq(third[1]));
         }
         if (fourth.length < 1) {
-			document.getElementById('enter4').innerHTML = "Please select";
+			document.getElementById('enter4').innerHTML = "--Please select--";
         }
         else {
         	document.getElementById('enter4').innerHTML = "";
-        	playChords(fourth);
+        	playChords(midiToFreq(fourth[1]));
         } 
     }
     
@@ -180,43 +188,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
         	wave = this.value;
         }
     }
-    
-    var chordsGain1 = {};
 
     function playChords(sequence) {
-        const osc1 = audioCtx.createOscillator();
-        osc1.type = wave;
-        osc1.frequency.value = midiToFreq(sequence[1]);
-        const gain1 = audioCtx.createGain();
+        const osc = audioCtx.createOscillator();
+        osc.type = wave;
+        osc.frequency.value = midiToFreq(sequence[1])
+        
+        const gain = audioCtx.createGain();
         for (let i = 0; i < 200; i++) {
-        	gain1.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain1.gain.setValueAtTime(0.8, audioCtx.currentTime + beatsNum*i/tempo + 0.01);
-            gain1.gain.setTargetAtTime(0.65, audioCtx.currentTime + beatsNum*i/tempo + 0.01, 0.5);
-            gain1.gain.setValueAtTime(0, audioCtx.currentTime + beatsNum*i/tempo + 0.51);
-            gain1.gain.setTargetAtTime(0, audioCtx.currentTime + beatsNum*i/tempo + 0.51, beatsNum/tempo - 0.51); 
+        	gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.8, audioCtx.currentTime + beatsNum*i/tempo + 0.01);
+            gain.gain.setTargetAtTime(0.65, audioCtx.currentTime + beatsNum*i/tempo + 0.01, 0.5);
+            gain.gain.setValueAtTime(0, audioCtx.currentTime + beatsNum*i/tempo + 0.51);
+            gain.gain.setTargetAtTime(0, audioCtx.currentTime + beatsNum*i/tempo + 0.51, beatsNum/tempo - 0.51); 
         }
-        osc1.connect(gain1).connect(audioCtx.destination);
-        osc1.start();
-   
-        //osc2 and 3
-
-        chordsGain1 = gain1;
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start();
+ 
+        chordsGain = gain;
     }
 
-    playButton.addEventListener("click", function () {
-        if (playState == false) {	
-            selectedChords();    
-            playState = true;
-            document.getElementById('play').style.backgroundColor = "black";
-            document.getElementById('play').style.color = "white";     
-		}
-        else if (playState == true) {
-            //have to comment the line below, run, and uncomment then run -> find another way to stop the osc1
-			chordsGain1.gain.cancelScheduledValues(audioCtx.currentTime);
-        	playState = false;
-            document.getElementById('play').style.backgroundColor = "white";
-            document.getElementById('play').style.color = "black"; 
-        }
-    })
+
+
 })
 
